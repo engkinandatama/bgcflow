@@ -11,9 +11,10 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 | **1. Data Selection & QC** | `ncbi_genome_download`, `seqfu`, `fastani`, `mash` | ✅ **Lulus (100% Berhasil)** | Otomatis download sekuens NCBI, kalkulasi N50 & GC content via SeqFu, dan pairwise ANI matrix via FastANI bekerja sangat cepat & stabil. |
 | **2. Anotasi Genom** | `prokka` | ✅ **Lulus (100% Berhasil)** | Berhasil mengekstrak CDS, protein (`.faa`), GFF, dan GenBank (`.gbk`) untuk seluruh sampel pengujian. |
 | **3. Pangenome** | `roary` | ✅ **Lulus (100% Berhasil)** | Berhasil mengelompokkan matriks kehadiran gen pangenom (`df_gene_presence_binary.csv`) dan pohon autoMLST secara paralel. |
-| **3b. Pangenome (PPanGGOLiN)** | `ppanggolin` | ⚠️ **Temuan Masalah (Lihat Detail Temuan #1)** | Modul `ppanggolin.smk` belum terdaftar di `workflow/Snakefile` utama; file konfigurasi `rules_ppanggolin.yaml` masih terpisah. |
+| **3b. Pangenome (PPanGGOLiN)** | `ppanggolin` (v2.x) | ✅ **Lulus (100% Berhasil)** | Berhasil mengintegrasikan GFF Prokka ke PPanGGOLiN, partisi graf pangenome, rarefaction curve, dan MSA core/phylo ke `data/processed/{name}/ppanggolin/genome/pangenome.h5`. |
 | **4. Functional Annotation** | `eggnog-mapper`, `eggnog-roary` | ✅ **Lulus (100% Berhasil)** | Berhasil meng-anotasi pangenome Roary dengan COG/KEGG dan menghasilkan `data/processed/{name}/eggnog_roary/emapper.annotations`. |
 | **5. BGC Mining** | `antismash` (v8.0.4) | ✅ **Lulus (100% Berhasil)** | Berhasil mendeteksi kluster BGC dari seluruh genom dan mengekstrak tabel region ke `data/processed/{name}/tables/df_regions_antismash_8.0.4.csv`. |
+| **5b. BGC Clustering** | `bigscape2`, `MIBiG` | ✅ **Lulus (100% Berhasil)** | Berhasil mengelompokkan BGC ke jaringan kemiripan (GCF) dan menghasilkan laporan visualisasi Cytoscape & HTML di `data/processed/{name}/bigscape2/`. |
 | **6. Reporting & Warehouse** | `duckdb`, `metabase`, `parquet` | ⏳ *Akan Diuji* | Validasi pipeline ETL ke format database analitik. |
 
 ---
@@ -50,7 +51,21 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #3: KeyError pada Integrasi Roary ➡️ PPanGGOLiN (Whitespace Parsing Bug)
+- **Lokasi File:**
+  - [workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py](file:///home/nanda/projects/bgcflow/workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py#L31)
+  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L37)
+- **Gejala / Error:**
+  `KeyError: 'The gene  PHLFEKDO_02690 associated to family group_2235 from the clustering file is not found in pangenome.'`
+- **Akar Masalah (Root Cause):**
+  Saat mem-parsing file `clustered_proteins` dari Roary ke format MMseqs2/PPanGGOLiN, fungsi `v.split("\t")` tidak melakukan `.strip()`. Nama gen mengandung spasi terdepan (`" PHLFEKDO_02690"` alih-alih `"PHLFEKDO_02690"`), sehingga PPanGGOLiN gagal mencocokkan ID gen dengan anotasi GFF dan melempar `KeyError`. Inilah penyebab utama pipeline PPanGGOLiN gagal dan graf pangenome kosong.
+- **Perbaikan yang Dilakukan (Fix Applied):**
+  Menambahkan pembersihan whitespace: `[gene.strip() for gene in v.split("\t") if gene.strip()]` di `prep_roary_cluster_to_mmseqs2_format.py`.
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 - **CPU Cores:** `--cores 64` (Memanfaatkan 100% kuota CPU yang tersedia untuk eksekusi paralel maksimal).
 - **RAM Constraint:** Cukup dialokasikan `--resources mem_mb=80000` (atau biarkan default untuk sub-rules ringan).
