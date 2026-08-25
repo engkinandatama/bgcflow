@@ -124,7 +124,20 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #9: Over-eager Dependency `final_outputs` pada Rule `csv_to_parquet`
+- **Lokasi File:**
+  - [workflow/rules/data_warehouse.smk](file:///home/nanda/projects/bgcflow/workflow/rules/data_warehouse.smk#L15-L20)
+- **Gejala / Error:**
+  Saat user ingin mengonversi tabel analitik ke format Parquet, Snakemake memicu eksekusi seluruh tools opsional (ARTS, DeepTFactor, BiG-SLiCE) yang tidak relevan dan memicu crash jika salah satu tool opsional tersebut gagal.
+- **Akar Masalah (Root Cause):**
+  Rule `csv_to_parquet` mendefinisikan `csv=final_outputs` sebagai input, padahal skrip `csv_to_parquet.py` hanya melakukan transformasi lokal terhadap file `.csv` yang sudah terbentuk di folder `data/processed/{name}`.
+- **Perbaikan yang Dilakukan (Fix Applied):**
+  Menghapus `csv=final_outputs` dari input rule `csv_to_parquet` agar transformasi Parquet berjalan mandiri (*decoupled*).
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 
 
