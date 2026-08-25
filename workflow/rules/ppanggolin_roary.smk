@@ -68,7 +68,6 @@ rule ppanggolin_genome_roary:
         echo "\n#### 4. Predicting region of genome plasticity with ppanggolin rgp... ####" >> {log}
         ppanggolin rgp \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
 
         echo "\n#### 5. Finding spots of insertion with ppanggolin spot... ####" >> {log}
@@ -79,8 +78,8 @@ rule ppanggolin_genome_roary:
         echo "\n#### 6. Finding conserved modules with ppanggolin module... ####" >> {log}
         ppanggolin module \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
+
 
         echo "\n#### 7. Calculating rarefaction curves with ppanggolin rarefaction... ####" >> {log}
         ppanggolin rarefaction -f \
