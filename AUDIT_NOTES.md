@@ -15,7 +15,7 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 | **4. Functional Annotation** | `eggnog-mapper`, `eggnog-roary` | ✅ **Lulus (100% Berhasil)** | Berhasil meng-anotasi pangenome Roary dengan COG/KEGG dan menghasilkan `data/processed/{name}/eggnog_roary/emapper.annotations`. |
 | **5. BGC Mining** | `antismash` (v8.0.4) | ✅ **Lulus (100% Berhasil)** | Berhasil mendeteksi kluster BGC dari seluruh genom dan mengekstrak tabel region ke `data/processed/{name}/tables/df_regions_antismash_8.0.4.csv`. |
 | **5b. BGC Clustering** | `bigscape2`, `MIBiG` | ✅ **Lulus (100% Berhasil)** | Berhasil mengelompokkan BGC ke jaringan kemiripan (GCF) dan menghasilkan laporan visualisasi Cytoscape & HTML di `data/processed/{name}/bigscape2/`. |
-| **6. Reporting & Warehouse** | `duckdb`, `metabase`, `parquet` | ⏳ *Akan Diuji* | Validasi pipeline ETL ke format database analitik. |
+| **6. Reporting & Warehouse** | `duckdb`, `parquet`, `metabase` | ✅ **Lulus (100% Berhasil)** | Berhasil mengekstrak seluruh dataset anotasi, CDSS, regions, dan matriks pangenom ke format analitik kolumnar Apache Parquet di `data/processed/{name}/data_warehouse/`. |
 
 ---
 
