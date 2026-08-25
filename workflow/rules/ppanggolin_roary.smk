@@ -197,7 +197,7 @@ rule ppanggolin_genome_roary_draw_spots:
         "logs/ppanggolin/genome_roary/draw_spots_{name}.log"
     shell:
         """
-        ppanggolin draw -f -p {input.ppanggolin} --spots all --output {output.folder} &>> {log}
+        ppanggolin draw -f -p {input.ppanggolin} --draw_spots --spots all --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_gexf:

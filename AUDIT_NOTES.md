@@ -88,7 +88,20 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #6: Argumen `--draw_spots` Wajib pada Subcommand `ppanggolin draw --spots`
+- **Lokasi File:**
+  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L200)
+- **Gejala / Error:**
+  `argparse.ArgumentError: The --spots argument cannot be used when --draw_spots is not specified.`
+- **Akar Masalah (Root Cause):**
+  Pada PPanGGOLiN v2, validator parser argumen mewajibkan flag `--draw_spots` aktif saat parameter `--spots all` digunakan.
+- **Perbaikan yang Dilakukan (Fix Applied):**
+  Memperbarui shell command menjadi `ppanggolin draw -f -p {input.ppanggolin} --draw_spots --spots all --output {output.folder}`.
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 
 
