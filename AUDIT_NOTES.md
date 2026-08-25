@@ -12,7 +12,7 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 | **2. Anotasi Genom** | `prokka` | ✅ **Lulus (100% Berhasil)** | Berhasil mengekstrak CDS, protein (`.faa`), GFF, dan GenBank (`.gbk`) untuk seluruh sampel pengujian. |
 | **3. Pangenome** | `roary` | ✅ **Lulus (100% Berhasil)** | Berhasil mengelompokkan matriks kehadiran gen pangenom (`df_gene_presence_binary.csv`) dan pohon autoMLST secara paralel. |
 | **3b. Pangenome (PPanGGOLiN)** | `ppanggolin` | ⚠️ **Temuan Masalah (Lihat Detail Temuan #1)** | Modul `ppanggolin.smk` belum terdaftar di `workflow/Snakefile` utama; file konfigurasi `rules_ppanggolin.yaml` masih terpisah. |
-| **4. Functional Annotation** | `eggnog-mapper` | ⏳ *Akan Diuji* | Investigasi integrasi parsing matriks COG dan mapping emapper output. |
+| **4. Functional Annotation** | `eggnog-mapper` | ✅ **Lulus (100% Berhasil)** | Berhasil mengeksekusi DIAMOND blastp dan mapping anotasi COG/KEGG ke `data/interim/eggnog/`. |
 | **5. BGC Mining** | `antismash`, `gecco`, `BiG-SCAPE`, `BiG-SLiCE` | ⏳ *Akan Diuji* | Validasi kompabilitas parser JSON schema antiSMASH versi terbaru. |
 | **6. Reporting & Warehouse** | `duckdb`, `metabase`, `parquet` | ⏳ *Akan Diuji* | Validasi pipeline ETL ke format database analitik. |
 
