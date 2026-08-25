@@ -100,7 +100,20 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #7: Conda Environment Over-constrained pada `bigslice.yaml`
+- **Lokasi File:**
+  - [workflow/envs/bigslice.yaml](file:///home/nanda/projects/bgcflow/workflow/envs/bigslice.yaml#L5-L30)
+- **Gejala / Error:**
+  `PackagesNotFoundError: The following packages are not available from current channels: _openmp_mutex==5.1=1_gnu, _libgcc_mutex=0.1=main`
+- **Akar Masalah (Root Cause):**
+  File environment `bigslice.yaml` berisi *build hash pin* internal dari anaconda repository lawas yang sudah tidak ada lagi di channel modern `conda-forge`/`bioconda`. Saat Snakemake mencoba membangun dependency DAG untuk final outputs, pembuatan environment conda gagal.
+- **Perbaikan yang Dilakukan (Fix Applied):**
+  Membersihkan package list `bigslice.yaml` menjadi format deklaratif yang kompatibel dan portabel untuk channel conda modern.
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 
 
