@@ -76,7 +76,20 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #5: Subcommand `ppanggolin write` Digantikan oleh `write_pangenome` pada PPanGGOLiN v2
+- **Lokasi File:**
+  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L107-L328)
+- **Gejala / Error:**
+  `ppanggolin: error: argument : invalid choice: 'write' (choose from annotate, cluster, graph, partition, rarefaction, workflow, panrgp, panmodule, all, draw, write_pangenome, write_genomes, write_metadata, ...)`
+- **Akar Masalah (Root Cause):**
+  Pada PPanGGOLiN v2, modul ekspor `write` telah dipecah menjadi `write_pangenome`, `write_genomes`, dan `write_metadata`. File `ppanggolin_roary.smk` masih memanggil perintah lama `ppanggolin write` sehingga seluruh tahap ekspor tabel partisi, regions, dan `.gexf` gagal.
+- **Perbaikan yang Dilakukan (Fix Applied):**
+  Mengganti seluruh pemanggilan `ppanggolin write` menjadi `ppanggolin write_pangenome` di `ppanggolin_roary.smk`.
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 
 

@@ -107,7 +107,7 @@ rule ppanggolin_genome_roary_write_regions:
         "logs/ppanggolin/genome_roary/write_regions_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --regions --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --regions --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_write_stats:
@@ -122,7 +122,7 @@ rule ppanggolin_genome_roary_write_stats:
         "logs/ppanggolin/genome_roary/write_stats_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --stats --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --stats --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_write_spots:
@@ -137,7 +137,7 @@ rule ppanggolin_genome_roary_write_spots:
         "logs/ppanggolin/genome_roary/write_spots_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --spots --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --spots --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_draw_ucurve:
@@ -212,9 +212,9 @@ rule ppanggolin_genome_roary_gexf:
         "logs/ppanggolin/genome_roary/gexf_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --light_gexf --output {output.folder} &>> {log}
-        ppanggolin write -f -p {input.ppanggolin} --gexf --output {output.folder} &>> {log}
-        ppanggolin write -f -p {input.ppanggolin} --json --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --light_gexf --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --gexf --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --json --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_gene_pres_abs:
@@ -229,8 +229,8 @@ rule ppanggolin_genome_roary_gene_pres_abs:
         "logs/ppanggolin/genome_roary/gene_pres_abs_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --Rtab --output {output.folder} &>> {log}
-        ppanggolin write -f -p {input.ppanggolin} --csv --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --Rtab --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --csv --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_partitions:
@@ -245,7 +245,7 @@ rule ppanggolin_genome_roary_partitions:
         "logs/ppanggolin/genome_roary/partitions_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --partitions --output $(dirname {input.ppanggolin}) &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --partitions --output $(dirname {input.ppanggolin}) &>> {log}
         """
 
 rule ppanggolin_genome_roary_projection:
@@ -260,7 +260,7 @@ rule ppanggolin_genome_roary_projection:
         "logs/ppanggolin/genome_roary/projection_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --projection --output $(dirname {input.ppanggolin}) &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --projection --output $(dirname {input.ppanggolin}) &>> {log}
         """
 
 rule ppanggolin_genome_roary_families:
@@ -275,7 +275,7 @@ rule ppanggolin_genome_roary_families:
         "logs/ppanggolin/genome_roary/families_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --families_tsv --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --families_tsv --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_borders:
@@ -290,7 +290,7 @@ rule ppanggolin_genome_roary_borders:
         "logs/ppanggolin/genome_roary/borders_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --borders --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --borders --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_modules:
@@ -305,7 +305,7 @@ rule ppanggolin_genome_roary_modules:
         "logs/ppanggolin/genome_roary/modules_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --modules --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --modules --output {output.folder} &>> {log}
         """
 
 rule ppanggolin_genome_roary_spot_modules:
@@ -320,5 +320,5 @@ rule ppanggolin_genome_roary_spot_modules:
         "logs/ppanggolin/genome_roary/spot_modules_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --spot_modules --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} --spot_modules --output {output.folder} &>> {log}
         """
