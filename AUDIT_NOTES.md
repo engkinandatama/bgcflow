@@ -112,7 +112,20 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #8: Inkompatibilitas BiG-SLiCE Legacy dengan antiSMASH v8 Output
+- **Lokasi File:**
+  - [workflow/rules/bigslice.smk](file:///home/nanda/projects/bgcflow/workflow/rules/bigslice.smk#L19-L37)
+- **Gejala / Error:**
+  `[acc].region00X.gbk is not a recognized antiSMASH clustergbk` diikuti `FileNotFoundError: .../cache/bgc_features_1.pkl` saat clustering BGC.
+- **Akar Masalah (Root Cause):**
+  Tool `bigslice` (v1.1.x) didesain untuk format antiSMASH versi lama (v5/v6) dan mencari tag `cluster`. Pada antiSMASH v7/v8, format GBK menggunakan tag `region` & `cand_cluster`. Akibatnya BiG-SLiCE menolak file BGC antiSMASH v8.
+- **Rekomendasi / Solusi:**
+  Gunakan **BiG-SCAPE 2** (`rules/bigscape2.smk`) sebagai clustering engine standar untuk antiSMASH v8 (yang sudah teruji 100% sukses pada audit ini). Untuk BiG-SLiCE, diperlukan konversi kompatibilitas retro GenBank atau menunggu update engine BiG-SLiCE.
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 
 
