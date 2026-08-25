@@ -57,7 +57,6 @@ rule ppanggolin_genome_roary:
         echo "\n##### 3. Building pangenome graph with ppanggolin graph... #####" >> {log}
         ppanggolin graph \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
 
         echo "\n##### 3. Partitioning graph with ppanggolin partition... #####" >> {log}
@@ -75,7 +74,6 @@ rule ppanggolin_genome_roary:
         echo "\n#### 5. Finding spots of insertion with ppanggolin spot... ####" >> {log}
         ppanggolin spot \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
 
         echo "\n#### 6. Finding conserved modules with ppanggolin module... ####" >> {log}

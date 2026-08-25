@@ -64,7 +64,20 @@ Dokumen ini mencatat temuan teknis, status modul, dan rencana perbaikan pipeline
 
 ---
 
+### 🔴 Temuan #4: Inkompatibilitas Flag CLI PPanGGOLiN v2 (`--cpu` Flag Error)
+- **Lokasi File:**
+  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L58-L78)
+- **Gejala / Error:**
+  `ppanggolin: error: unrecognized arguments: --cpu 16` pada `ppanggolin graph` dan `ppanggolin spot`.
+- **Akar Masalah (Root Cause):**
+  Pada upgrade PPanGGOLiN versi 2.3.0, subcommand `ppanggolin graph` dan `ppanggolin spot` tidak lagi menerima argumen multithreading `--cpu`. Kode pipeline lama masih menyertakan `--cpu {threads}` sehingga eksekusi graph building crash di step 3.
+- **Perbaikan yang Dilakukan (Fix Applied):**
+  Menghapus argumen `--cpu {threads}` dari pemanggilan `ppanggolin graph` dan `ppanggolin spot` di `ppanggolin_roary.smk`.
+
+---
+
 ### 💡 Rekomendasi Resource HPC untuk Pengujian Cepat
+
 
 
 - **CPU Cores:** `--cores 64` (Memanfaatkan 100% kuota CPU yang tersedia untuk eksekusi paralel maksimal).
