@@ -92,7 +92,10 @@ include: "rules/bgc.smk"
 include: "rules/diamond.smk"
 include: "rules/deeptfactor.smk"
 include: "rules/cblaster.smk"
+include: "rules/dbcan.smk"
+resource_mapping["dbcan_db"] = str(rules.install_dbcan_db.output.hmm)
 include: "rules/data_warehouse.smk"
+
 include: "rules/convert_genbank.smk"
 include: "rules/gecco.smk"
 include: "rules/amrfinderplus.smk"

@@ -206,6 +206,9 @@ rule ppanggolin_genome_roary_gexf:
         previous = "data/processed/{name}/ppanggolin/genome_roary/spots_draw"
     output:
         folder = directory("data/processed/{name}/ppanggolin/genome_roary/gexf"),
+        gexf = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph.gexf",
+        light_gexf = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph_light.gexf",
+        json = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph.json"
     conda:
         "../envs/ppanggolin.yaml"
     log:
@@ -216,6 +219,7 @@ rule ppanggolin_genome_roary_gexf:
         ppanggolin write_pangenome -f -p {input.ppanggolin} --gexf --output {output.folder} &>> {log}
         ppanggolin write_pangenome -f -p {input.ppanggolin} --json --output {output.folder} &>> {log}
         """
+
 
 rule ppanggolin_genome_roary_gene_pres_abs:
     input:
