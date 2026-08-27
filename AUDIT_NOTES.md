@@ -121,15 +121,19 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ---
 
-### 🔴 Temuan #7: Conda Environment Over-constrained pada `bigslice.yaml`
+### 🔴 Temuan #7: Conda Environment Over-constrained & Channel Mismatch pada `bigslice.yaml`
 - **File Terdampak:**
   - [workflow/envs/bigslice.yaml](file:///home/nanda/projects/bgcflow/workflow/envs/bigslice.yaml#L5-L30)
 - **Gejala & Pesan Error:**
   `PackagesNotFoundError: The following packages are not available from current channels: _openmp_mutex==5.1=1_gnu, _libgcc_mutex=0.1=main`
 - **Akar Masalah (Root Cause):**
-  File `bigslice.yaml` memuat build-hash spesifik platform internal Anaconda lama (`_openmp_mutex=5.1=1_gnu`, dll) yang tidak tersedia lagi pada channel `conda-forge`/`bioconda` modern, menyebabkan Conda gagal me-resolve environment solver.
+  File `bigslice.yaml` sebelumnya dibuat menggunakan ekspor otomatis (`conda env export`) pada mesin lokal yang mengaktifkan channel komersial Anaconda **`defaults` (`pkgs/main`)**. 
+  - Paket `_openmp_mutex=5.1=1_gnu` dan `_libgcc_mutex=0.1=main` adalah build biner eksklusif milik channel `defaults`.
+  - Di file `bigslice.yaml`, channel yang dideklarasikan adalah **`conda-forge`** dan **`bioconda`**. Pada `conda-forge`, paket `_openmp_mutex` hanya tersedia di versi `4.5` (format build conda-forge).
+  - Akibat ketidakcocokan (*channel mismatch*) ini, Conda/Mamba menolak resolusi dependensi dan instalasi gagal total.
 - **Tindakan Perbaikan yang Dilakukan (Fix Applied):**
-  Menyederhanakan definisi paket di `bigslice.yaml` menjadi format deklaratif portabel (`python=3.10`, `hmmer=3.3.2`, dependensi pip), sehingga environment berhasil terpasang otomatis.
+  1. Menghapus build string spesifik vendor/channel (`_openmp_mutex`, `_libgcc_mutex`, dsb).
+  2. Mengubah spesifikasi dependensi menjadi format **deklaratif portabel** (`python=3.10`, `hmmer=3.3.2`, pustaka pip) yang sepenuhnya kompatibel dengan standar terbuka `conda-forge`/`bioconda`. Environment kini terpasang otomatis dan stabil di seluruh platform Linux/HPC.
 
 ---
 
