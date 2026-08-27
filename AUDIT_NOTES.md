@@ -40,37 +40,37 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #1: Modul PPanGGOLiN Terputus dari Main Snakefile Workflow
 - **File Terdampak:**
-  - [workflow/Snakefile](file:///home/nanda/projects/bgcflow/workflow/Snakefile#L63-L97)
-  - [workflow/rules_ppanggolin.yaml](file:///home/nanda/projects/bgcflow/workflow/rules_ppanggolin.yaml)
-  - [workflow/rules/ppanggolin.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin.smk)
+  - [workflow/Snakefile](workflow/Snakefile#L63-L97)
+  - [workflow/rules_ppanggolin.yaml](workflow/rules_ppanggolin.yaml)
+  - [workflow/rules/ppanggolin.smk](workflow/rules/ppanggolin.smk)
 - **Gejala & Pesan Error:**
   Eksekusi target PPanGGOLiN langsung melempar error Snakemake:
   `MissingRuleException: No rule to produce data/processed/.../ppanggolin/...`
 - **Akar Masalah (Root Cause):**
   File `rules/ppanggolin.smk` dan `rules/ppanggolin_roary.smk` belum di-`include` ke dalam `workflow/Snakefile` utama. Konfigurasi parameternya juga masih terisolasi di file `rules_ppanggolin.yaml`.
 - **Tindakan Perbaikan yang Dilakukan (Fix Applied):**
-  1. Menambahkan baris `include: "rules/ppanggolin.smk"` dan `include: "rules/ppanggolin_roary.smk"` pada blok modular di [workflow/Snakefile](file:///home/nanda/projects/bgcflow/workflow/Snakefile).
+  1. Menambahkan baris `include: "rules/ppanggolin.smk"` dan `include: "rules/ppanggolin_roary.smk"` pada blok modular di [workflow/Snakefile](workflow/Snakefile).
   2. Memverifikasi pemetaan rule graph sehingga Snakemake dapat menyusun DAG dari Prokka ke PPanGGOLiN secara mulus.
 
 ---
 
 ### 🔴 Temuan #2: emapper.py Gagal Menemukan Database DIAMOND (Missing `--dmnd_db`)
 - **File Terdampak:**
-  - [workflow/rules/eggnog.smk](file:///home/nanda/projects/bgcflow/workflow/rules/eggnog.smk#L33)
-  - [workflow/rules/roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/roary.smk#L54)
+  - [workflow/rules/eggnog.smk](workflow/rules/eggnog.smk#L33)
+  - [workflow/rules/roary.smk](workflow/rules/roary.smk#L54)
 - **Gejala & Pesan Error:**
   `DIAMOND database .../resources/eggnog_db/eggnog_proteins.dmnd not present. Use download_eggnog_database.py to fetch it`
 - **Akar Masalah (Root Cause):**
   Secara default BGCFlow mengunduh basis data takson bakteri (`bacteria.dmnd`, ~4.8 GB) untuk efisiensi penyimpanan HPC. Namun perintah pemanggilan `emapper.py` tidak menyertakan argumen `--dmnd_db {input.dmnd}`, sehingga `emapper.py` mencari file default universal `eggnog_proteins.dmnd` (ukuran 40+ GB yang tidak ada).
 - **Tindakan Perbaikan yang Dilakukan (Fix Applied):**
-  Menambahkan argumen eksplisit `--dmnd_db {input.dmnd}` pada shell command `emapper.py` di [workflow/rules/eggnog.smk](file:///home/nanda/projects/bgcflow/workflow/rules/eggnog.smk) dan rule `eggnog_roary` di [workflow/rules/roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/roary.smk). Anotasi fungsional berhasil 100% menghasilkan kolom COG/KEGG.
+  Menambahkan argumen eksplisit `--dmnd_db {input.dmnd}` pada shell command `emapper.py` di [workflow/rules/eggnog.smk](workflow/rules/eggnog.smk) dan rule `eggnog_roary` di [workflow/rules/roary.smk](workflow/rules/roary.smk). Anotasi fungsional berhasil 100% menghasilkan kolom COG/KEGG.
 
 ---
 
 ### 🔴 Temuan #3: KeyError pada Integrasi Roary ➡️ PPanGGOLiN (Leading Whitespace Bug)
 - **File Terdampak:**
-  - [workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py](file:///home/nanda/projects/bgcflow/workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py#L31)
-  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L37)
+  - [workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py](workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py#L31)
+  - [workflow/rules/ppanggolin_roary.smk](workflow/rules/ppanggolin_roary.smk#L37)
 - **Gejala & Pesan Error:**
   `KeyError: 'The gene  PHLFEKDO_02690 associated to family group_2235 from the clustering file is not found in pangenome.'`
 - **Akar Masalah (Root Cause):**
@@ -86,7 +86,7 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #4: Inkompatibilitas Flag CLI PPanGGOLiN v2 (`--cpu` Flag Error)
 - **File Terdampak:**
-  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L58-L86)
+  - [workflow/rules/ppanggolin_roary.smk](workflow/rules/ppanggolin_roary.smk#L58-L86)
 - **Gejala & Pesan Error:**
   `ppanggolin: error: unrecognized arguments: --cpu 16` pada subcommand `ppanggolin graph`, `rgp`, `spot`, dan `module`.
 - **Akar Masalah (Root Cause):**
@@ -98,7 +98,7 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #5: Subcommand `ppanggolin write` Digantikan oleh `write_pangenome` pada PPanGGOLiN v2
 - **File Terdampak:**
-  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L107-L328)
+  - [workflow/rules/ppanggolin_roary.smk](workflow/rules/ppanggolin_roary.smk#L107-L328)
 - **Gejala & Pesan Error:**
   `ppanggolin: error: argument : invalid choice: 'write' (choose from annotate, cluster, graph, partition, rarefaction, workflow, panrgp, panmodule, all, draw, write_pangenome, write_genomes, write_metadata, ...)`
 - **Akar Masalah (Root Cause):**
@@ -110,7 +110,7 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #6: Argumen `--draw_spots` Wajib pada Subcommand `ppanggolin draw --spots`
 - **File Terdampak:**
-  - [workflow/rules/ppanggolin_roary.smk](file:///home/nanda/projects/bgcflow/workflow/rules/ppanggolin_roary.smk#L200)
+  - [workflow/rules/ppanggolin_roary.smk](workflow/rules/ppanggolin_roary.smk#L200)
 - **Gejala & Pesan Error:**
   `argparse.ArgumentError: The --spots argument cannot be used when --draw_spots is not specified.`
 - **Akar Masalah (Root Cause):**
@@ -123,7 +123,7 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #7: Conda Environment Over-constrained & Channel Mismatch pada `bigslice.yaml`
 - **File Terdampak:**
-  - [workflow/envs/bigslice.yaml](file:///home/nanda/projects/bgcflow/workflow/envs/bigslice.yaml#L5-L30)
+  - [workflow/envs/bigslice.yaml](workflow/envs/bigslice.yaml#L5-L30)
 - **Gejala & Pesan Error:**
   `PackagesNotFoundError: The following packages are not available from current channels: _openmp_mutex==5.1=1_gnu, _libgcc_mutex=0.1=main`
 - **Akar Masalah (Root Cause):**
@@ -139,7 +139,7 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #8: Inkompatibilitas BiG-SLiCE Legacy dengan antiSMASH v8 Output
 - **File Terdampak:**
-  - [workflow/rules/bigslice.smk](file:///home/nanda/projects/bgcflow/workflow/rules/bigslice.smk#L19-L37)
+  - [workflow/rules/bigslice.smk](workflow/rules/bigslice.smk#L19-L37)
 - **Gejala & Pesan Error:**
   `[acc].region00X.gbk is not a recognized antiSMASH clustergbk` diikuti `FileNotFoundError: .../cache/bgc_features_1.pkl`.
 - **Akar Masalah (Root Cause):**
@@ -151,7 +151,7 @@ Seluruh permasalahan tersebut telah dianalisis akar masalahnya, diperbaiki koden
 
 ### 🔴 Temuan #9: Over-eager Dependency `final_outputs` pada Rule `csv_to_parquet`
 - **File Terdampak:**
-  - [workflow/rules/data_warehouse.smk](file:///home/nanda/projects/bgcflow/workflow/rules/data_warehouse.smk#L15-L20)
+  - [workflow/rules/data_warehouse.smk](workflow/rules/data_warehouse.smk#L15-L20)
 - **Gejala & Pesan Error:**
   Ketika menjalankan konversi Parquet, Snakemake mencoba memicu seluruh tool opsional yang belum terkonfigurasi (ARTS, DeepTFactor, BiG-SLiCE) dan memicu crash jika salah satu tool opsional tersebut gagal.
 - **Akar Masalah (Root Cause):**
