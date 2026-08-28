@@ -4,7 +4,13 @@
 .test/
 data/*
 resources/
-config/
+# Ignore samples data and credentials in config, but allow yaml configs
+config/**/samples.csv
+config/**/*.csv
+config/**/*.gbk
+config/**/*.fna
+config/**/data/
+
 workflow/report/*
 !workflow/report/images/rulegraph.svg
 !workflow/report/images/.gitkeep
