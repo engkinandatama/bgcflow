@@ -21,18 +21,25 @@ def run_dbcan_hmm(faa_path, hmm_db_path, output_tsv, evalue_cutoff=1e-15, covera
     with pyhmmer.plan7.HMMFile(str(hmm_db_path)) as hmm_file:
         hmms = list(hmm_file)
 
+    hmm_lengths = {}
+    for h in hmms:
+        h_name = h.name.decode('utf-8') if isinstance(h.name, bytes) else str(h.name)
+        hmm_lengths[h_name] = h.M
+
     # Run hmmsearch
-    for top_hits in pyhmmer.hmmsearch(hmms, sequences):
+    for hmm, top_hits in zip(hmms, pyhmmer.hmmsearch(hmms, sequences)):
+        h_name = hmm.name.decode('utf-8') if isinstance(hmm.name, bytes) else str(hmm.name)
+        cazyme_family = h_name.replace('.hmm', '')
+        hmm_len = hmm.M
+
         for hit in top_hits:
             if hit.evalue <= evalue_cutoff:
+                gene_id = hit.name.decode('utf-8') if isinstance(hit.name, bytes) else str(hit.name)
                 for domain in hit.domains:
                     if domain.i_evalue <= evalue_cutoff:
                         # calculate domain coverage
-                        hmm_len = top_hits.query_length
                         domain_cov = (domain.alignment.hmm_to - domain.alignment.hmm_from + 1) / hmm_len
                         if domain_cov >= coverage_cutoff:
-                            cazyme_family = top_hits.query_name.decode('utf-8').replace('.hmm', '')
-                            gene_id = hit.name.decode('utf-8')
                             
                             # Determine CAZyme class
                             cazyme_class = "Unknown"

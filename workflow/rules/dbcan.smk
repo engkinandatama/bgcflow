@@ -11,9 +11,10 @@ rule install_dbcan_db:
     shell:
         """
         mkdir -p {dbcan_db_dir}
-        curl -sSL "https://bcb.unl.edu/dbCAN2/download/dbCAN-HMMdb.txt" -o {output.hmm} 2>> {log}
+        curl -sSL "https://dbcan.s3.us-west-2.amazonaws.com/db_v5-2-9_5-5-2026/dbCAN.hmm" -o {output.hmm} 2>> {log}
         hmmpress -f {output.hmm} &>> {log}
         """
+
 
 rule dbcan_annotate:
     input:
@@ -59,14 +60,17 @@ rule enrich_ppanggolin_gexf:
     input:
         gexf = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph.gexf",
         pangenome_csv = "data/processed/{name}/ppanggolin/genome_roary/gene_pres_abs",
-        cazyme_csv = "data/processed/{name}/tables/df_cazyme.csv"
+        cazyme_csv = "data/processed/{name}/tables/df_cazyme.csv",
+        bgc_dir = "data/interim/bgcs/{name}/8.0.4"
     output:
-        gexf_annotated = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph_annotated.gexf"
+        gexf_annotated = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph_annotated.gexf",
+        overlap_csv = "data/processed/{name}/tables/df_bgc_cazyme_overlap.csv"
     conda:
         "../envs/dbcan.yaml"
     log:
         "logs/ppanggolin/enrich_gexf_{name}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/inject_gexf_metadata.py {input.gexf} {input.pangenome_csv} {input.cazyme_csv} {output.gexf_annotated} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/inject_gexf_metadata.py {input.gexf} {input.pangenome_csv} {input.cazyme_csv} {output.gexf_annotated} {input.bgc_dir} {output.overlap_csv} 2>> {log}
         """
+

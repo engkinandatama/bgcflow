@@ -15,10 +15,12 @@
 # PS: the variable pep and name is an alias
 
 projects:
-# Project 1 (Bacillus velezensis)
-  - pep: config/Bacillus_velezensis/project_config.yaml
+# Project 1 (Bacillus velezensis Dummy 10 strains)
+  - pep: config/Bacillus_velezensis_dummy/project_config.yaml
+#  - pep: config/Bacillus_velezensis/project_config.yaml
 # Project 2 (PEP file)
 #  - pep: config/Lactobacillus_delbrueckii/project_config.yaml
+
 
 
 

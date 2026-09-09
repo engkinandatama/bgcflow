@@ -1,0 +1,35 @@
+name: Bacillus_velezensis_dummy
+
+pep_version: 2.1.0
+
+description: "Bacillus velezensis 10 Strains Dummy Pangenome with CAZyme and BGC Mining"
+
+sample_table: samples.csv
+
+#### RULE CONFIGURATION ####
+rules:
+  seqfu: TRUE
+  mash: TRUE
+  fastani: TRUE
+  checkm: FALSE
+  gtdbtk: FALSE
+  prokka-gbk: TRUE
+  antismash: TRUE
+  query-bigslice: FALSE
+  bigscape2: TRUE
+  bigslice: FALSE
+  automlst-wrapper: FALSE
+  arts: FALSE
+  roary: TRUE
+  ppanggolin: TRUE
+  ppanggolin_roary: TRUE
+  dbcan: TRUE
+  cazyme_gexf: TRUE
+  eggnog: FALSE
+  eggnog-roary: FALSE
+  deeptfactor: FALSE
+  deeptfactor-roary: FALSE
+  cblaster-genome: FALSE
+  cblaster-bgc: FALSE
+  gecco: FALSE
+  amrfinderplus: FALSE
