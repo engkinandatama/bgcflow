@@ -3,23 +3,23 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bzip2
+  - bzip2=1.0.8
   - ca-certificates
   - certifi
   - hmmer=3.3.2
-  - libffi
-  - ncurses
-  - openssl
-  - pip
-  - python=3.10
-  - readline
-  - setuptools
-  - sqlite
-  - tk
+  - libffi=3.4.2
+  - ncurses=6.3
+  - openssl=1.1.1*
+  - pip=22.3.1
+  - python=3.10.8
+  - readline=8.2
+  - setuptools=65.5.0
+  - sqlite=3.40.0
+  - tk=8.6.12
   - tzdata
-  - wheel
-  - xz
-  - zlib
+  - wheel=0.37.1
+  - xz=5.2.8
+  - zlib=1.2.13
   - wget
   - unzip
   - pip:

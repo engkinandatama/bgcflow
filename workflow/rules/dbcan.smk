@@ -61,7 +61,7 @@ rule enrich_ppanggolin_gexf:
         gexf = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph.gexf",
         pangenome_csv = "data/processed/{name}/ppanggolin/genome_roary/gene_pres_abs",
         cazyme_csv = "data/processed/{name}/tables/df_cazyme.csv",
-        bgc_dir = "data/interim/bgcs/{name}/8.0.4"
+        bgc_dir = f"data/interim/bgcs/{{name}}/{dependency_version['antismash']}"
     output:
         gexf_annotated = "data/processed/{name}/ppanggolin/genome_roary/gexf/pangenomeGraph_annotated.gexf",
         overlap_csv = "data/processed/{name}/tables/df_bgc_cazyme_overlap.csv"
