@@ -21,9 +21,14 @@ if len(py_wildcards) > 0:
             bgcflow_rules_py="|".join(py_wildcards),
         params:
             notebook="workflow/notebook/{bgcflow_rules_py}.py.ipynb",
+            fallback="workflow/notebook/template.py.ipynb",
         shell:
             """
-            cp {params.notebook} {output.notebook} 2>> {log}
+            if [ -f "{params.notebook}" ]; then
+                cp "{params.notebook}" "{output.notebook}" 2>> {log}
+            else
+                cp "{params.fallback}" "{output.notebook}" 2>> {log}
+            fi
             """
 
     rule mkdocs_py_report:
@@ -40,7 +45,7 @@ if len(py_wildcards) > 0:
             bgcflow_rules_py="|".join(py_wildcards),
         shell:
             """
-            jupyter nbconvert --to markdown --execute {input.notebook} --no-input --output {wildcards.bgcflow_rules_py}.md 2>> {log}
+            jupyter nbconvert --to markdown --execute --allow-errors {input.notebook} --no-input --output {wildcards.bgcflow_rules_py}.md 2>> {log}
             """
 
 
@@ -57,9 +62,14 @@ if len(rpy_wildcards) > 0:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         params:
             notebook="workflow/notebook/{bgcflow_rules_rpy}.rpy.ipynb",
+            fallback="workflow/notebook/template.py.ipynb",
         shell:
             """
-            cp {params.notebook} {output.notebook} 2>> {log}
+            if [ -f "{params.notebook}" ]; then
+                cp "{params.notebook}" "{output.notebook}" 2>> {log}
+            else
+                cp "{params.fallback}" "{output.notebook}" 2>> {log}
+            fi
             """
 
     rule mkdocs_rpy_report:
@@ -76,5 +86,5 @@ if len(rpy_wildcards) > 0:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         shell:
             """
-            jupyter nbconvert --to markdown --execute {input.notebook} --no-input --output {wildcards.bgcflow_rules_rpy}.md 2>> {log}
+            jupyter nbconvert --to markdown --execute --allow-errors {input.notebook} --no-input --output {wildcards.bgcflow_rules_rpy}.md 2>> {log}
             """

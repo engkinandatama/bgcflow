@@ -14,12 +14,12 @@ workflow/report/*
 !workflow/report/images/rulegraph.svg
 !workflow/report/images/.gitkeep
 !workflow/report/*.rst
-workflow/notebook/
 workflow/bgcflow/bgcflow.egg-info*
 workflow/bgcflow/build*
 *.pyc
 *.cache
 *.ipynb
+!workflow/notebook/*.ipynb
 *.log
 !data/raw/fasta/P8-2B-3.1.fna
 !data/*/*/.gitkeep
