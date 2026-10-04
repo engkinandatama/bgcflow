@@ -3,11 +3,18 @@ rule copy_readme:
         "data/processed/{name}/README.md",
     log:
         "logs/report/copy-readme-{name}.log",
-
     shell:
         """
-        cp workflow/notebook/README_template.md {output}
+        cp workflow/notebook/README_template.md {output} 2>> {log}
+        mkdir -p data/processed/{wildcards.name}/docs
+        # Symlink interactive assets into docs so MkDocs serves them with 200 OK without 404
+        for tool in antismash bigscape bigscape2 ppanggolin tables automlst_wrapper; do
+            if [ -d "data/processed/{wildcards.name}/$tool" ] && [ ! -e "data/processed/{wildcards.name}/docs/$tool" ]; then
+                ln -sf "../$tool" "data/processed/{wildcards.name}/docs/$tool" 2>> {log} || true
+            fi
+        done
         """
+
 if len(py_wildcards) > 0:
 
     rule copy_template_notebook:
@@ -45,7 +52,7 @@ if len(py_wildcards) > 0:
             bgcflow_rules_py="|".join(py_wildcards),
         shell:
             """
-            jupyter nbconvert --to markdown --execute --allow-errors {input.notebook} --no-input --output {wildcards.bgcflow_rules_py}.md 2>> {log}
+            python workflow/bgcflow/bgcflow/data/compile_notebook_report.py "{input.notebook}" "{output.markdown}" "{wildcards.name}" "{wildcards.bgcflow_rules_py}" "{log}"
             """
 
 
@@ -86,5 +93,5 @@ if len(rpy_wildcards) > 0:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         shell:
             """
-            jupyter nbconvert --to markdown --execute --allow-errors {input.notebook} --no-input --output {wildcards.bgcflow_rules_rpy}.md 2>> {log}
+            python workflow/bgcflow/bgcflow/data/compile_notebook_report.py "{input.notebook}" "{output.markdown}" "{wildcards.name}" "{wildcards.bgcflow_rules_rpy}" "{log}"
             """
