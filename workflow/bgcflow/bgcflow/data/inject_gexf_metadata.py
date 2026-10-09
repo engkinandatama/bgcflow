@@ -288,16 +288,16 @@ def inject_cazyme_and_bgc_to_gexf(gexf_in, pangenome_csv, cazyme_csv, gexf_out, 
         for new_attr in new_attrs:
             node_attributes.append(new_attr)
 
-    # Color Palette definitions (RGBA)
-    # BGC_and_CAZyme: Vivid Purple / Magenta (#9B59B6)
-    # BGC_only: Coral / Vivid Orange (#E67E22)
-    # CAZyme_only: Sky Blue / Cyan (#3498DB)
-    # Other: Soft Muted Gray (#D5DBDB)
+    # Color Palette definitions (RGBA) - Colorblind-safe (Tol / Okabe-Ito inspired)
+    # Other: Faint, muted neutral gray for background (#E0E0E0)
+    # BGC_only: High-contrast vermillion / reddish-orange (#D55E00) -> [213, 94, 0]
+    # CAZyme_only: High-contrast blue / sky blue (#0072B2) -> [0, 114, 178]
+    # BGC_and_CAZyme: High-contrast reddish purple / magenta (#CC79A7) -> [204, 121, 167]
     COLOR_MAP = {
-        'BGC_and_CAZyme': {'r': '155', 'g': '89', 'b': '182', 'a': '1.0'},
-        'BGC_only':       {'r': '230', 'g': '126', 'b': '34', 'a': '1.0'},
-        'CAZyme_only':    {'r': '52',  'g': '152', 'b': '219', 'a': '1.0'},
-        'Other':          {'r': '213', 'g': '219', 'b': '219', 'a': '1.0'}
+        'BGC_and_CAZyme': {'r': '204', 'g': '121', 'b': '167', 'a': '1.0'},
+        'BGC_only':       {'r': '213', 'g': '94',  'b': '0',   'a': '1.0'},
+        'CAZyme_only':    {'r': '0',   'g': '114', 'b': '178', 'a': '1.0'},
+        'Other':          {'r': '224', 'g': '224', 'b': '224', 'a': '1.0'}
     }
 
     nodes_query = './/g:node' if ns else './/node'
