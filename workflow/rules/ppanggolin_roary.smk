@@ -34,7 +34,7 @@ rule ppanggolin_genome_roary:
         python workflow/bgcflow/bgcflow/data/prep_ppanggolin_from_roary.py "$INPUT_GFF" "$ORGANISM_ANNOTATION_LIST" 2>> {log}
 
         echo "\nConverting Roary output to mmseqs2 format" >> {log}
-        python workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py {input.roary}/clustered_proteins $CLUSTERS_FILE 2>> {log}
+        python workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py {input.roary}/clustered_proteins $CLUSTERS_FILE "$INPUT_GFF" 2>> {log}
 
         echo "\n##### 1 Running ppanggolin annotate... #####" >> {log}
         ppanggolin annotate \

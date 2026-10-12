@@ -36,3 +36,10 @@ pytest-coverage.txt
 graphify-out/
 .graphify*
 
+# Post-analysis, Custom Visualizations & Supplementary Data
+post_analysis/
+analysis_scripts/
+figures/
+supplementary/
+supplementary_data/
+scratch/
