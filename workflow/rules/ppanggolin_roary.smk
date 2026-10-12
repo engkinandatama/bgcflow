@@ -40,6 +40,7 @@ rule ppanggolin_genome_roary:
         ppanggolin annotate \
             --cpu {threads} \
             --anno $ORGANISM_ANNOTATION_LIST \
+            --use_pseudo \
             --output $OUTDIR \
             --force \
             --verbose 1 &>> {log}
